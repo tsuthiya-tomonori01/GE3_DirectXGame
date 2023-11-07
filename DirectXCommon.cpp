@@ -1,6 +1,7 @@
 #include "DirectXCommon.h"
 
 #include <cassert>
+#include <thread>
 
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -11,6 +12,8 @@ void DirectXCommon::Initialize(WinApp* winApp)
 {
     // DirectX初期化処理　ここから
     this->winApp = winApp;
+
+    InitializeFixFPS();
 
     DeviceInitialize();
     CommandInitialize();
@@ -95,6 +98,8 @@ void DirectXCommon::PostDraw()
         CloseHandle(event);
     }
 
+    UpdateFixFPS();
+
     // キューをクリア
     result = commandAllocator->Reset();
     assert(SUCCEEDED(result));
@@ -103,8 +108,33 @@ void DirectXCommon::PostDraw()
     assert(SUCCEEDED(result));
 }
 
-void DirectXCommon::DeviceInitialize()
-{
+void DirectXCommon::InitializeFixFPS() {
+
+    reference_ = std::chrono::steady_clock::now(); 
+}
+
+void DirectXCommon::UpdateFixFPS() {
+
+    const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
+
+    const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
+
+    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+
+    std::chrono::microseconds elapsed =
+	    std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
+
+    if (elapsed < kMinCheckTime) {
+
+        while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
+			std::this_thread::sleep_for(std::chrono::microseconds(1));
+		}
+	}
+
+    reference_ = std::chrono::steady_clock::now();
+}
+
+void DirectXCommon::DeviceInitialize() {
     HRESULT result;
 
 #ifdef _DEBUG

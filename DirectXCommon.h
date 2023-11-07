@@ -21,7 +21,7 @@ public:
 	void PostDraw();
 
 	ID3D12Device* GetDevice() const { return device.Get(); }
-	ID3D12GraphicsCommandList* GetCommandList() const { return commandList.Get(); }
+	ID3D12GraphicsCommandList* GetCommandList() const { return commandList.Get(); }	
 
 private:
 	void DeviceInitialize();
@@ -35,6 +35,10 @@ private:
 	void DepthBufferInitialize();
 
 	void FenceInitialize();
+
+	void InitializeFixFPS();
+
+	void UpdateFixFPS();
 
 private:
 	WinApp* winApp = nullptr;
@@ -61,5 +65,7 @@ private:
 	UINT64 fenceVal = 0;
 
 	D3D12_RESOURCE_BARRIER barrierDesc{};
+
+	std::chrono::steady_clock::time_point reference_;
 };
 
