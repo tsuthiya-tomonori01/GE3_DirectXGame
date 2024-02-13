@@ -1,10 +1,17 @@
 ﻿#include "WinApp.h"
 
+#include "External/imgui/imgui.h"
+
 #pragma comment(lib, "winmm.lib")
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 // ウィンドウプロシージャ
 LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
+		return true;
+	}
+
     // メッセージ応じてゲーム固有の処理を行う
     switch (msg) {
         // ウィンドウが破棄された
@@ -20,7 +27,9 @@ LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 void WinApp::Initialize()
 {
-    
+ 
+    CoInitializeEx(0, COINITBASE_MULTITHREADED);
+
     // ウィンドウクラスの設定
     
     w.cbSize = sizeof(WNDCLASSEX);
@@ -73,6 +82,8 @@ bool WinApp::update()
 
 void WinApp::Finalize()
 {
+
+    CoUninitialize();
     // ウィンドウクラスを登録解除
     UnregisterClass(w.lpszClassName, w.hInstance);
 }

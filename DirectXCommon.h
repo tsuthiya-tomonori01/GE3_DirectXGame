@@ -1,7 +1,7 @@
 #pragma once
 #include <wrl.h>
-#include <dxgi1_6.h>
 #include <d3d12.h>
+#include <dxgi1_6.h>
 #include <chrono>
 
 #include <vector>
@@ -23,6 +23,12 @@ public:
 	ID3D12Device* GetDevice() const { return device.Get(); }
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList.Get(); }	
 
+	DXGI_SWAP_CHAIN_DESC1 GetSwapChainDesc() { return swapChainDesc; }
+	
+	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc() { return rtvDesc; }
+
+	ID3D12DescriptorHeap* GetSrvDescriptorHeap() { return srvDescriptorHeap.Get(); }
+
 private:
 	void DeviceInitialize();
 
@@ -39,6 +45,8 @@ private:
 	void InitializeFixFPS();
 
 	void UpdateFixFPS();
+
+	ID3D12DescriptorHeap* CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescripots, bool shaderVisible);
 
 private:
 	WinApp* winApp = nullptr;
@@ -67,5 +75,10 @@ private:
 	D3D12_RESOURCE_BARRIER barrierDesc{};
 
 	std::chrono::steady_clock::time_point reference_;
+
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+
+	ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap;
+	ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap;
 };
 
