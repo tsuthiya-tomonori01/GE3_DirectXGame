@@ -27,6 +27,8 @@ public:
 
 	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(uint32_t textureIndex);
 
+	const DirectX::TexMetadata& GetMetaData(uint32_t textureIndex);
+
 private:
 	void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
 

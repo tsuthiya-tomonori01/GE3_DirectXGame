@@ -44,7 +44,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	TextureManager::GetInstance()->LoadTexture(L"Resources/reimu.png");
 
     std::vector<Sprite*> sprite;
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 1; i++) {
 		Sprite* temp = new Sprite();
 		if (i%2 == 0)        temp->Initialize(dxCommon_, Common, L"Resources/mario.jpg");
 		else if (i % 2 == 1) temp->Initialize(dxCommon_, Common, L"Resources/reimu.png");   
@@ -87,14 +87,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//size.y += 0.01f;
 		//sprite->SetSize(size);
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
 			sprite[i]->Update();
 		}
 
         ImGuiManager::CreateCommand();
         dxCommon_->PreDraw();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
 			sprite[i]->Draw();
 		}
 
@@ -103,7 +103,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     }
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 1; i++) {
 		delete sprite[i];
 	}
 
