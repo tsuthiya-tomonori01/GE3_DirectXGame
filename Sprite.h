@@ -100,7 +100,7 @@ private:
 	DirectX::XMFLOAT2 size = {512, 512};
 
 	DirectX::XMFLOAT2 anchorPoint = {0, 0};
-	bool isFlipX_ = true;
+	bool isFlipX_ = false;
 	bool isFlipY_ = false;
 
 	DirectX::XMFLOAT2 textureLeftTop = {0, 0};
